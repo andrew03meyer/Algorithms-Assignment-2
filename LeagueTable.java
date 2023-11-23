@@ -78,9 +78,6 @@ public class LeagueTable {
         //Set the half variable
         int halfArray = length/2;
 
-        //System.out.println("First part: " + copyPartOfLeague(league, 0, halfArray-1));
-        //System.out.println("Second part: " + copyPartOfLeague(league, halfArray, length-1));
-
         //Left and right arrays
         ArrayList<Team> left = mergeSort(copyPartOfLeague(league, 0, halfArray-1));
         ArrayList<Team> right = mergeSort(copyPartOfLeague(league, halfArray, length-1));
