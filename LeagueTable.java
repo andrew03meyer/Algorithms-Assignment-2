@@ -2,7 +2,6 @@
 // DO NOT EDIT SOME METHODS FROM THE CLASS - THESE ARE CLEARLY STATED
 // DO NOT USE ADDITIONAL LIBRARIES TO IMPLEMENT YOUR SOLUTION
 
-import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -87,8 +86,7 @@ public class LeagueTable {
         ArrayList<Team> right = mergeSort(copyPartOfLeague(league, halfArray, length-1));
 
         //Returns that array merged together
-        ArrayList sorted = merge(left, right);
-        return sorted;
+        return merge(left, right);
     }
 
     // Part 1 of A2: Implement the Merge algorithm as part of Mergesort
