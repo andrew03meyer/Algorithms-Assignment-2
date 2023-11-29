@@ -4,6 +4,7 @@
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 
 public class LeagueTable {
     private ArrayList<Team> teams;
@@ -143,6 +144,51 @@ public class LeagueTable {
     // ONLY RECURSIVE SOLUTIONS WILL BE ACCEPTED FOR THE ADDITIONAL METHOD
     public void analyseTeams(ArrayList<Team> league) {
 
-    }
+        //Create copy of league arraylist
+        ArrayList<Team> tempArray = copyLeague();
 
+        for(Team temp: tempArray){
+
+            league.remove(temp);
+            System.out.println(sumGoals(league, temp.getPoints()));
+
+            //Repopulate league
+            league = new ArrayList<Team>();
+            for(Team temp2 : tempArray){
+                league.add(temp2);
+            }
+
+            /*for(Team temp2 : league) {
+                System.out.println(temp2.getName());
+            }*/
+        }
+    }
+    public Boolean sumGoals(ArrayList<Team> league, int goals){
+        //System.out.println("bussss");
+        if(goals == 0){
+            return true;
+        }
+        if(league.size() == 0){
+            return false;
+        }
+
+        Boolean goalsFound = false;
+
+        for(int x = 0; x < league.size(); x++){
+
+            //Create array without specific team
+            ArrayList<Team> temp = new ArrayList<Team>();
+            for(int y=0; y < league.size(); y++){
+                if(y != x){
+                    temp.add(league.get(y));
+                }
+            }
+
+            goals = goals-league.get(x).getPoints();
+            //System.out.println("Team: " + league.get(x).getName() + " Points: " + goals);
+
+            goalsFound = goalsFound || sumGoals(temp, goals);
+        }
+        return goalsFound;
+    }
 }
