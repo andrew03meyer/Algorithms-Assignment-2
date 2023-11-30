@@ -2,6 +2,7 @@
 // DO NOT EDIT SOME METHODS FROM THE CLASS - THESE ARE CLEARLY STATED
 // DO NOT USE ADDITIONAL LIBRARIES TO IMPLEMENT YOUR SOLUTION
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -150,7 +151,7 @@ public class LeagueTable {
         for(Team temp: tempArray){
 
             league.remove(temp);
-            System.out.println(sumGoals(league, temp.getPoints()));
+            goalSum(league, new ArrayList<Team>(), temp.getPoints());
 
             //Repopulate league
             league = new ArrayList<Team>();
@@ -168,11 +169,11 @@ public class LeagueTable {
         if(goals == 0){
             return true;
         }
-        if(league.size() == 0){
+        if(league.isEmpty()){
             return false;
         }
 
-        Boolean goalsFound = false;
+        boolean goalsFound = false;
 
         for(int x = 0; x < league.size(); x++){
 
@@ -182,6 +183,9 @@ public class LeagueTable {
                 if(y != x){
                     temp.add(league.get(y));
                 }
+                else{
+                    System.out.println(league.get(y).getName());
+                }
             }
 
             goals = goals-league.get(x).getPoints();
@@ -190,5 +194,21 @@ public class LeagueTable {
             goalsFound = goalsFound || sumGoals(temp, goals);
         }
         return goalsFound;
+    }
+
+    public void goalSum(ArrayList<Team> set, ArrayList<Team> subset, int goals){
+        if(set.isEmpty()){
+            return;
+        }
+        if(subset.size() > 2 && goals > 0){
+            for(Team subTeam : subset){
+                System.out.println(subTeam.getName());
+            }
+        }
+        for(Team team : set){
+            set.remove(team);
+            subset.add(team);
+            goalSum(set, subset, goals - team.getPoints());
+        }
     }
 }
