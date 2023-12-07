@@ -4,6 +4,7 @@
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 
@@ -148,7 +149,7 @@ public class LeagueTable {
         //Create copy of league arraylist
         ArrayList<Team> tempArray = copyLeague();
 
-        for(Team temp: tempArray){
+        /*for(Team temp: tempArray){
 
             league.remove(temp);
             goalSum(league, new ArrayList<Team>(), temp.getPoints());
@@ -162,36 +163,43 @@ public class LeagueTable {
             /*for(Team temp2 : league) {
                 System.out.println(temp2.getName());
             }*/
+        Team[] teams = new Team[league.size()];
+        for(int x = 0; x < league.size(); x++){
+            teams[x] = league.get(x);
+        }
+        for(Team team : teams) {
+            System.out.println("team: " + sumGoals(teams, team.getPoints()));
         }
     }
-    public Boolean sumGoals(ArrayList<Team> league, int goals){
-        //System.out.println("bussss");
+    public Boolean sumGoals(Team[] teams, int goals){
+        System.out.println("bussss");
         if(goals == 0){
+
             return true;
         }
-        if(league.isEmpty()){
+        if(teams.length == 0){
             return false;
         }
 
         boolean goalsFound = false;
 
-        for(int x = 0; x < league.size(); x++){
-
-            //Create array without specific team
-            ArrayList<Team> temp = new ArrayList<Team>();
-            for(int y=0; y < league.size(); y++){
-                if(y != x){
-                    temp.add(league.get(y));
-                }
-                else{
-                    System.out.println(league.get(y).getName());
-                }
-            }
-
-            goals = goals-league.get(x).getPoints();
+        for(int x = 0; x < teams.length; x++){
+            System.out.println("ijei");
+            goals = goals-teams[x].getPoints();
             //System.out.println("Team: " + league.get(x).getName() + " Points: " + goals);
+            Team[] newTeams = new Team[teams.length-1];
+            int index = 0;
 
-            goalsFound = goalsFound || sumGoals(temp, goals);
+            //add all teams except teams[x]
+            while(index < newTeams.length){
+                if(index != x){
+                    newTeams[index] = teams[index];
+                    index++;
+
+                }
+                index+=2;
+            }
+            goalsFound = goalsFound || sumGoals(newTeams, goals);
         }
         return goalsFound;
     }
