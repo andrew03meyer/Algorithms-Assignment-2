@@ -3,10 +3,7 @@
 // DO NOT USE ADDITIONAL LIBRARIES TO IMPLEMENT YOUR SOLUTION
 
 import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Iterator;
+import java.util.*;
 
 public class LeagueTable {
     private ArrayList<Team> teams;
@@ -145,78 +142,47 @@ public class LeagueTable {
     // (because the parameter for total points is not known in advance, but it depends on the selected team)
     // ONLY RECURSIVE SOLUTIONS WILL BE ACCEPTED FOR THE ADDITIONAL METHOD
     public void analyseTeams(ArrayList<Team> league) {
-
-        //Create copy of league arraylist
-        ArrayList<Team> tempArray = copyLeague();
-
-        /*for(Team temp: tempArray){
-
-            league.remove(temp);
-            goalSum(league, new ArrayList<Team>(), temp.getPoints());
-
-            //Repopulate league
-            league = new ArrayList<Team>();
-            for(Team temp2 : tempArray){
-                league.add(temp2);
-            }
-
-            /*for(Team temp2 : league) {
-                System.out.println(temp2.getName());
-            }*/
+        //Add values to an array
         Team[] teams = new Team[league.size()];
         for(int x = 0; x < league.size(); x++){
             teams[x] = league.get(x);
         }
+
+        //Repeat for every team in array
         for(Team team : teams) {
-            System.out.println("team: " + sumGoals(teams, team.getPoints()));
+            System.out.println("team " + team.getName() + ": " + sumGoals(teams, team.getPoints()));
         }
     }
     public Boolean sumGoals(Team[] teams, int goals){
-        System.out.println("bussss");
+        //Termination cases
         if(goals == 0){
-
             return true;
         }
+
         if(teams.length == 0){
             return false;
         }
 
         boolean goalsFound = false;
 
-        for(int x = 0; x < teams.length; x++){
-            System.out.println("ijei");
-            goals = goals-teams[x].getPoints();
+        for (Team team : teams) {
+            goals = goals - team.getPoints();
             //System.out.println("Team: " + league.get(x).getName() + " Points: " + goals);
-            Team[] newTeams = new Team[teams.length-1];
+
+            Team[] newTeams = new Team[teams.length - 1];
             int index = 0;
 
-            //add all teams except teams[x]
-            while(index < newTeams.length){
-                if(index != x){
-                    newTeams[index] = teams[index];
+            //add all teams except team to be removed
+            for (Team newTeam : teams) {
+                if (newTeam != team) {
+                    newTeams[index] = newTeam;
                     index++;
-
                 }
-                index+=2;
             }
-            goalsFound = goalsFound || sumGoals(newTeams, goals);
+
+            //Call recursion
+            goalsFound = goalsFound | sumGoals(newTeams, goals);
         }
         return goalsFound;
-    }
-
-    public void goalSum(ArrayList<Team> set, ArrayList<Team> subset, int goals){
-        if(set.isEmpty()){
-            return;
-        }
-        if(subset.size() > 2 && goals > 0){
-            for(Team subTeam : subset){
-                System.out.println(subTeam.getName());
-            }
-        }
-        for(Team team : set){
-            set.remove(team);
-            subset.add(team);
-            goalSum(set, subset, goals - team.getPoints());
-        }
     }
 }
