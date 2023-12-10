@@ -148,41 +148,103 @@ public class LeagueTable {
             teams[x] = league.get(x);
         }
 
+        /*Team[]temp = new Team[3];
+        for(int x=0; x<3; x++){
+            temp[x] = teams[x];
+        }
+
+        System.out.println("Permutations");
+        Permutations(temp, league.get(0), 0);
+        System.out.println();*/
+
         //Repeat for every team in array
         for(Team team : teams) {
-            System.out.println("team " + team.getName() + ": " + sumGoals(teams, team.getPoints()));
+            //System.out.println(team.getName() + ": ");
+            sumGoals(teams, team.getPoints(), new Team[0], team);
         }
     }
-    public Boolean sumGoals(Team[] teams, int goals){
-        //Termination cases
-        if(goals == 0){
-            return true;
+    public String printTeams(Team[] teams){
+        //System.out.println(teams.length);
+        String tempStr="";
+        for(Team temp : teams){
+            tempStr += temp.getName()+", ";
         }
-
-        if(teams.length == 0){
-            return false;
+        if(tempStr == ""){
+            tempStr = "null";
         }
+        return tempStr;
+    }
 
-        boolean goalsFound = false;
+    public void sumGoals(Team[] teams, int goals, Team[] selected, Team compTeam){
 
-        for (Team team : teams) {
-            goals = goals - team.getPoints();
-            //System.out.println("Team: " + league.get(x).getName() + " Points: " + goals);
-
-            Team[] newTeams = new Team[teams.length - 1];
-            int index = 0;
-
-            //add all teams except team to be removed
-            for (Team newTeam : teams) {
-                if (newTeam != team) {
-                    newTeams[index] = newTeam;
-                    index++;
-                }
+        //Sum of selected
+        int selectedSum = 0;
+        for(Team temp : selected){
+            if(temp != null) {
+                selectedSum += temp.getPoints();
             }
-
-            //Call recursion
-            goalsFound = goalsFound | sumGoals(newTeams, goals);
         }
-        return goalsFound;
+
+        //Termination cases
+        if(selectedSum < goals && selected.length >= 3){
+            Permutations(selected, compTeam, 0);
+            //Print(selected, compTeam);
+        }
+
+        if(teams.length == 0 || selectedSum >= goals){
+            return;
+        }
+
+        //New selected array
+        Team[] newSelected = new Team[selected.length+1];
+        for(int x = 0; x < selected.length; x++){
+            newSelected[x] = selected[x];
+        }
+        newSelected[newSelected.length-1] = teams[0];
+
+        //Updated teams
+        Team[] newTeams = new Team[teams.length-1];
+        int index = 0;
+        for(Team temp : teams){
+            if(temp != teams[0]){
+                newTeams[index] = temp;
+                index++;
+            }
+        }
+
+        //Recursive call
+        sumGoals(newTeams, goals, newSelected, compTeam);       //adds teams[0] to selected teams
+        sumGoals(newTeams, goals, selected, compTeam);          //doesn't add teams[0] to selected teams
+    }
+
+    public void Print(Team[] selected, Team compTeam){
+        //System.out.println(compTeam.getName() + ": ");
+        String values = compTeam.getName() + "(" + compTeam.getPoints() + ") > ";
+        for(Team temp : selected){
+            values += temp.getName() + "(" + temp.getPoints() + ") + ";
+        }
+        values = values.substring(0, values.length()-3);
+        System.out.println(values);
+    }
+
+    public void Permutations(Team[] selected, Team compTeam, int index){
+
+        //Termination Case
+        if(index == selected.length-1){
+            Print(selected, compTeam);
+            return;
+        }
+
+        for(int item = index; item < selected.length; item++){
+            Swap(selected, index, item);
+            Permutations(selected, compTeam,index+1);
+            Swap(selected, index, item);
+        }
+    }
+
+    public void Swap(Team[] selected, int x, int y){
+        Team temp = selected[x];
+        selected[x] = selected[y];
+        selected[y] = temp;
     }
 }
