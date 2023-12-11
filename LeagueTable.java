@@ -112,7 +112,7 @@ public class LeagueTable {
                     secondIndex++;
                 }
             }
-            //If one is bigger than the index
+            //If only one pointer is bigger than the index
             else {
                 if (firstIndex < firstHalf.size()) {
                     merged.add(firstHalf.get(firstIndex));
